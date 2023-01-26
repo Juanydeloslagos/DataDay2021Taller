@@ -31,7 +31,7 @@
 				}
 			},
 			{
-				"name": "Copy data1",
+				"name": "CopyData",
 				"type": "Copy",
 				"dependsOn": [
 					{
@@ -281,6 +281,29 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "Filter1",
+				"type": "Filter",
+				"dependsOn": [
+					{
+						"activity": "CopyData",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@array(activity('getExcel').output)",
+						"type": "Expression"
+					},
+					"condition": {
+						"value": "@equals(item(), '2018' )",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"annotations": []
