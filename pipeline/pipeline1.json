@@ -31,7 +31,30 @@
 				}
 			},
 			{
-				"name": "CopyData",
+				"name": "Filter1",
+				"type": "Filter",
+				"dependsOn": [
+					{
+						"activity": "getExcel",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@array(activity('getExcel').output.itemName)",
+						"type": "Expression"
+					},
+					"condition": {
+						"value": "@equals(item(), '2018' )",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Copy data1",
 				"type": "Copy",
 				"dependsOn": [
 					{
@@ -62,10 +85,7 @@
 						"type": "DelimitedTextSink",
 						"storeSettings": {
 							"type": "AzureBlobFSWriteSettings",
-							"copyBehavior": {
-								"value": "@activity('Filter1').output",
-								"type": "Expression"
-							}
+							"copyBehavior": "PreserveHierarchy"
 						},
 						"formatSettings": {
 							"type": "DelimitedTextWriteSettings",
@@ -284,29 +304,6 @@
 						"type": "DatasetReference"
 					}
 				]
-			},
-			{
-				"name": "Filter1",
-				"type": "Filter",
-				"dependsOn": [
-					{
-						"activity": "getExcel",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"items": {
-						"value": "@array(activity('getExcel').output)",
-						"type": "Expression"
-					},
-					"condition": {
-						"value": "@equals(item(), '2018' )",
-						"type": "Expression"
-					}
-				}
 			}
 		],
 		"annotations": []
