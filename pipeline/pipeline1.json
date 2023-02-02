@@ -59,6 +59,21 @@
 							"enablePartitionDiscovery": false
 						}
 					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings",
+							"copyBehavior": {
+								"value": "@first(string(activity('Filter1').output))",
+								"type": "Expression"
+							}
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".csv"
+						}
+					},
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
@@ -70,7 +85,8 @@
 								},
 								"sink": {
 									"name": "Column1",
-									"type": "String"
+									"type": "String",
+									"physicalType": "String"
 								}
 							},
 							{
@@ -80,7 +96,8 @@
 								},
 								"sink": {
 									"name": "Column2",
-									"type": "String"
+									"type": "String",
+									"physicalType": "String"
 								}
 							},
 							{
@@ -90,7 +107,8 @@
 								},
 								"sink": {
 									"name": "Column3",
-									"type": "String"
+									"type": "String",
+									"physicalType": "String"
 								}
 							},
 							{
@@ -100,7 +118,8 @@
 								},
 								"sink": {
 									"name": "Column4",
-									"type": "String"
+									"type": "String",
+									"physicalType": "String"
 								}
 							},
 							{
@@ -110,7 +129,8 @@
 								},
 								"sink": {
 									"name": "Column5",
-									"type": "String"
+									"type": "String",
+									"physicalType": "String"
 								}
 							},
 							{
@@ -120,7 +140,8 @@
 								},
 								"sink": {
 									"name": "Column6",
-									"type": "String"
+									"type": "String",
+									"physicalType": "String"
 								}
 							},
 							{
@@ -130,7 +151,8 @@
 								},
 								"sink": {
 									"name": "Column7",
-									"type": "String"
+									"type": "String",
+									"physicalType": "String"
 								}
 							},
 							{
@@ -140,7 +162,8 @@
 								},
 								"sink": {
 									"name": "Column8",
-									"type": "String"
+									"type": "String",
+									"physicalType": "String"
 								}
 							},
 							{
@@ -150,7 +173,8 @@
 								},
 								"sink": {
 									"name": "Column9",
-									"type": "String"
+									"type": "String",
+									"physicalType": "String"
 								}
 							},
 							{
@@ -160,7 +184,8 @@
 								},
 								"sink": {
 									"name": "Column10",
-									"type": "String"
+									"type": "String",
+									"physicalType": "String"
 								}
 							},
 							{
@@ -170,7 +195,8 @@
 								},
 								"sink": {
 									"name": "Column11",
-									"type": "String"
+									"type": "String",
+									"physicalType": "String"
 								}
 							},
 							{
@@ -180,7 +206,8 @@
 								},
 								"sink": {
 									"name": "Column12",
-									"type": "String"
+									"type": "String",
+									"physicalType": "String"
 								}
 							},
 							{
@@ -190,7 +217,8 @@
 								},
 								"sink": {
 									"name": "Column13",
-									"type": "String"
+									"type": "String",
+									"physicalType": "String"
 								}
 							},
 							{
@@ -200,7 +228,8 @@
 								},
 								"sink": {
 									"name": "Column14",
-									"type": "String"
+									"type": "String",
+									"physicalType": "String"
 								}
 							},
 							{
@@ -210,15 +239,27 @@
 								},
 								"sink": {
 									"name": "Column15",
-									"type": "String"
+									"type": "String",
+									"physicalType": "String"
 								}
 							}
-						]
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
 					}
 				},
 				"inputs": [
 					{
 						"referenceName": "Excel1",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Output3",
 						"type": "DatasetReference"
 					}
 				]
@@ -258,7 +299,7 @@
 						"type": "Expression"
 					},
 					"condition": {
-						"value": "@equals(activity('getExcel').output.itemName,'Prop_0')",
+						"value": "@if(equals(activity('getExcel').output.itemName,'Column1'),'1',activity('getExcel').output.exists)",
 						"type": "Expression"
 					}
 				}

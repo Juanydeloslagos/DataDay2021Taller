@@ -1,0 +1,92 @@
+{
+	"name": "Output3",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "output",
+				"fileSystem": "contailab"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Column1",
+				"type": "String"
+			},
+			{
+				"name": "Column2",
+				"type": "String"
+			},
+			{
+				"name": "Column3",
+				"type": "String"
+			},
+			{
+				"name": "Column4",
+				"type": "String"
+			},
+			{
+				"name": "Column5",
+				"type": "String"
+			},
+			{
+				"name": "Column6",
+				"type": "String"
+			},
+			{
+				"name": "Column7",
+				"type": "String"
+			},
+			{
+				"name": "Column8",
+				"type": "String"
+			},
+			{
+				"name": "Column9",
+				"type": "String"
+			},
+			{
+				"name": "Column10",
+				"type": "String"
+			},
+			{
+				"name": "Column11",
+				"type": "String"
+			},
+			{
+				"name": "Column12",
+				"type": "String"
+			},
+			{
+				"name": "Column13",
+				"type": "String"
+			},
+			{
+				"name": "Column14",
+				"type": "String"
+			},
+			{
+				"name": "Column15",
+				"type": "String"
+			},
+			{
+				"name": "Column16",
+				"type": "String"
+			},
+			{
+				"name": "Column17",
+				"type": "String"
+			}
+		]
+	}
+}
