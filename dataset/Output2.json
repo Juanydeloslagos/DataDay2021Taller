@@ -1,0 +1,21 @@
+{
+	"name": "Output2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Output2.xlxs",
+				"folderPath": "output",
+				"fileSystem": "contailab"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": []
+	}
+}
