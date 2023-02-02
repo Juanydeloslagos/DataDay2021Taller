@@ -30,10 +30,10 @@
 					"name": "filter2"
 				},
 				{
-					"name": "derivedColumn1"
+					"name": "select1"
 				},
 				{
-					"name": "select1"
+					"name": "pivot1"
 				}
 			],
 			"scriptLines": [
@@ -60,7 +60,6 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source1",
 				"source1 filter(((greater(Column_1, '2017') && (notEquals(Column_1,'Mes') && notEquals(Column_1,'Acumulado')))  && notEquals(Column_1, 'Diferencia año anterior')) && notEquals(Column_1, 'Mensual')) ~> filter2",
-				"select1 derive({AÑO} = Column_1) ~> derivedColumn1",
 				"filter2 select(mapColumn(",
 				"          Column_1,",
 				"          Column_2,",
@@ -78,7 +77,10 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select1",
-				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"select1 pivot(groupBy(Column_2),",
+				"     columnNaming: '$N$V',",
+				"     lateral: true) ~> pivot1",
+				"pivot1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          Column1 as string,",
