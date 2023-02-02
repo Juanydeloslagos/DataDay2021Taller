@@ -296,7 +296,7 @@
 						"type": "Expression"
 					},
 					"condition": {
-						"value": "@contains(item(), '\"2018\"')",
+						"value": "@contains(item(), 6)",
 						"type": "Expression"
 					}
 				}
