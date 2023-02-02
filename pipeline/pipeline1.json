@@ -94,7 +94,11 @@
 					"sink": {
 						"type": "DelimitedTextSink",
 						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings"
+							"type": "AzureBlobFSWriteSettings",
+							"copyBehavior": {
+								"value": "@activity('Filter1').output.structure ",
+								"type": "Expression"
+							}
 						},
 						"formatSettings": {
 							"type": "DelimitedTextWriteSettings",
