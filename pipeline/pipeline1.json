@@ -292,11 +292,11 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@array(activity('getExcel').output.itemName)",
+						"value": "@activity('getExcel').output",
 						"type": "Expression"
 					},
 					"condition": {
-						"value": "@greater(item(), '15')",
+						"value": "@equals(item(),'\"Mes\"' )",
 						"type": "Expression"
 					}
 				}
