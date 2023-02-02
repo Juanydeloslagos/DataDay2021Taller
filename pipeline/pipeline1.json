@@ -295,11 +295,11 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@array(activity('getExcel').output.itemName)",
+						"value": "@array(activity('getExcel').output)",
 						"type": "Expression"
 					},
 					"condition": {
-						"value": "@if(equals(activity('getExcel').output.itemName,'Column1'),'1',activity('getExcel').output.exists)",
+						"value": "@equals(item(),'Column1')",
 						"type": "Expression"
 					}
 				}
