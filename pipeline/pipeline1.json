@@ -301,7 +301,7 @@
 						"type": "Expression"
 					},
 					"condition": {
-						"value": "@equals(item(),10 )",
+						"value": "@equals(item().Mes, '\"2018\"')",
 						"type": "Expression"
 					}
 				}
