@@ -36,7 +36,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Filter1",
+						"activity": "Power Query1",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -64,7 +64,7 @@
 						"storeSettings": {
 							"type": "AzureBlobFSWriteSettings",
 							"copyBehavior": {
-								"value": "@string(activity('Filter1').output.Value)",
+								"value": "@activity('Power Query1').output",
 								"type": "Expression"
 							}
 						},
@@ -282,8 +282,8 @@
 				}
 			},
 			{
-				"name": "Filter1",
-				"type": "Filter",
+				"name": "Power Query1",
+				"type": "ExecuteWranglingDataflow",
 				"dependsOn": [
 					{
 						"activity": "getExcel",
@@ -292,16 +292,38 @@
 						]
 					}
 				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
-					"items": {
-						"value": "@array(activity('getExcel').output)",
-						"type": "Expression"
+					"dataflow": {
+						"referenceName": "powerquery1",
+						"type": "DataFlowReference"
 					},
-					"condition": {
-						"value": "@equals(item(),'\"Mes\"')",
-						"type": "Expression"
-					}
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"queries": [
+						{
+							"queryName": "UserQuery",
+							"dataflowSinks": [
+								{
+									"name": "UserQueryOutput3",
+									"dataset": {
+										"referenceName": "Output3",
+										"type": "DatasetReference"
+									},
+									"script": "sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tColumn1 as string,\n\t\tColumn2 as string,\n\t\tColumn3 as string,\n\t\tColumn4 as string,\n\t\tColumn5 as string,\n\t\tColumn6 as string,\n\t\tColumn7 as string,\n\t\tColumn8 as string,\n\t\tColumn9 as string,\n\t\tColumn10 as string,\n\t\tColumn11 as string,\n\t\tColumn12 as string,\n\t\tColumn13 as string,\n\t\tColumn14 as string,\n\t\tColumn15 as string,\n\t\tColumn16 as string,\n\t\tColumn17 as string\n\t),\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> UserQueryOutput3"
+								}
+							]
+						}
+					]
 				}
 			}
 		],
