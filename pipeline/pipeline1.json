@@ -292,7 +292,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('getExcel').output.itemName",
+						"value": "@array(activity('getExcel').output)",
 						"type": "Expression"
 					},
 					"condition": {
