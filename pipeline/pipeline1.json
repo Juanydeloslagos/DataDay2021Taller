@@ -289,7 +289,12 @@
 						]
 					}
 				],
-				"userProperties": [],
+				"userProperties": [
+					{
+						"name": "Mes",
+						"value": "\"Mes\""
+					}
+				],
 				"typeProperties": {
 					"items": {
 						"value": "@array(activity('getExcel').output)",
