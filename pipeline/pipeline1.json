@@ -64,7 +64,7 @@
 						"storeSettings": {
 							"type": "AzureBlobFSWriteSettings",
 							"copyBehavior": {
-								"value": "@first(string(activity('Filter1').output.Value))",
+								"value": "@activity('Filter1').output.Value",
 								"type": "Expression"
 							}
 						},
