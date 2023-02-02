@@ -296,7 +296,7 @@
 						"type": "Expression"
 					},
 					"condition": {
-						"value": "@contains(item(), 6)",
+						"value": "@greater(item(), 6)",
 						"type": "Expression"
 					}
 				}
