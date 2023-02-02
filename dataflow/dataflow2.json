@@ -56,7 +56,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source1",
-				"source1 filter((greater(Column_1, '2017') && (notEquals(Column_1,'Mes') && notEquals(Column_1,'Acumulado')))  && notEquals(Column_1, 'Diferencia año anterior')) ~> filter2",
+				"source1 filter(((greater(Column_1, '2017') && (notEquals(Column_1,'Mes') && notEquals(Column_1,'Acumulado')))  && notEquals(Column_1, 'Diferencia año anterior')) && notEquals(Column_1, 'Mensual')) ~> filter2",
 				"filter2 select(mapColumn(",
 				"          Column_1,",
 				"          Column_2,",
