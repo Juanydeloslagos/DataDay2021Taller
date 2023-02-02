@@ -296,7 +296,7 @@
 						"type": "Expression"
 					},
 					"condition": {
-						"value": "@equals(item().Column1,'\"Mes\"' )",
+						"value": "@equals(item(),10 )",
 						"type": "Expression"
 					}
 				}
