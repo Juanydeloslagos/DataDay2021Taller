@@ -34,6 +34,10 @@
 				},
 				{
 					"name": "pivot1"
+				},
+				{
+					"name": "ModifyColumns1",
+					"description": "Generado automáticamente por acciones de vista previa de datos"
 				}
 			],
 			"scriptLines": [
@@ -77,12 +81,14 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select1",
-				"select1 pivot(groupBy(Column_1,",
+				"ModifyColumns1 pivot(groupBy(Column_1,",
 				"          Column_2),",
 				"     pivotBy(Column_2),",
 				"     {} = sum(toFloat(Column_1)),",
 				"     columnNaming: '$N$V',",
 				"     lateral: false) ~> pivot1",
+				"select1 derive(Column_2 = toDecimal(Column_2),",
+				"          Column_4 = toDecimal(Column_4)) ~> ModifyColumns1",
 				"pivot1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
