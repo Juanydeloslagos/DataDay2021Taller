@@ -1,12 +1,12 @@
 {
-	"name": "dataflow2",
+	"name": "dfCDT",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "Excel1",
+						"referenceName": "ExcelCDT",
 						"type": "DatasetReference"
 					},
 					"name": "source1"
@@ -14,10 +14,6 @@
 			],
 			"sinks": [
 				{
-					"dataset": {
-						"referenceName": "Output3",
-						"type": "DatasetReference"
-					},
 					"name": "sink1",
 					"rejectedDataLinkedService": {
 						"referenceName": "AzureDataLakeStorage1",
@@ -63,9 +59,9 @@
 				"          Column_12 as string,",
 				"          Column_13 as string,",
 				"          Column_14 as string,",
-				"          {1} as string,",
-				"          {2} as string,",
-				"          {3} as string",
+				"          Column_15 as string,",
+				"          Column_16 as string,",
+				"          Column_17 as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
@@ -125,31 +121,14 @@
 				"     lateral: true) ~> pivot2",
 				"pivot2 sink(allowSchemaDrift: false,",
 				"     validateSchema: false,",
-				"     input(",
-				"          Column1 as string,",
-				"          Column2 as string,",
-				"          Column3 as string,",
-				"          Column4 as string,",
-				"          Column5 as string,",
-				"          Column6 as string,",
-				"          Column7 as string,",
-				"          Column8 as string,",
-				"          Column9 as string,",
-				"          Column10 as string,",
-				"          Column11 as string,",
-				"          Column12 as string,",
-				"          Column13 as string,",
-				"          Column14 as string,",
-				"          Column15 as string,",
-				"          Column16 as string,",
-				"          Column17 as string",
-				"     ),",
-				"     umask: 0022,",
-				"     preCommands: [],",
-				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     saveOrder: 1) ~> sink1"
+				"     store: 'cache',",
+				"     format: 'inline',",
+				"     output: false,",
+				"     saveOrder: 1,",
+				"     preCommands: [],",
+				"     postCommands: []) ~> sink1"
 			]
 		}
 	}
