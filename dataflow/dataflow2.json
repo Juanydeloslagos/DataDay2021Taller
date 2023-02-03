@@ -79,6 +79,7 @@
 				"     skipDuplicateMapOutputs: true) ~> select1",
 				"select1 pivot(groupBy(Column_1),",
 				"     pivotBy(Column_2),",
+				"     cotEnero = add(Column_2),",
 				"     columnNaming: '$N$V',",
 				"     lateral: false) ~> pivot1",
 				"pivot1 sink(allowSchemaDrift: true,",
