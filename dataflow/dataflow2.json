@@ -78,7 +78,7 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select1",
 				"select1 pivot(groupBy(Column_1),",
-				"     pivotBy(Column_2, ['1', null]),",
+				"     pivotBy(Column_2),",
 				"     cotEnero = sum(toFloat(Column_2)),",
 				"     columnNaming: '$N$V',",
 				"     lateral: true) ~> pivot1",
