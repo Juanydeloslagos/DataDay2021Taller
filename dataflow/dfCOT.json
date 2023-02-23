@@ -121,6 +121,7 @@
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
 				"     saveOrder: 1,",
 				"     mapColumn(",
 				"          {Año} = year,",
