@@ -149,7 +149,10 @@
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     saveOrder: 1) ~> sink1"
+				"     saveOrder: 1,",
+				"     mapColumn(",
+				"          Column1 = Column_1",
+				"     )) ~> sink1"
 			]
 		}
 	}
