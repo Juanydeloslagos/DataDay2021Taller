@@ -1,0 +1,133 @@
+{
+	"name": "dfCOT",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ExcelCDT",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "AzureDataLakeStorage1",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sink1",
+					"rejectedDataLinkedService": {
+						"referenceName": "AzureDataLakeStorage1",
+						"type": "LinkedServiceReference"
+					}
+				}
+			],
+			"transformations": [
+				{
+					"name": "filter2"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "pivot1"
+				},
+				{
+					"name": "unpivot1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Column_1 as string,",
+				"          Column_2 as string,",
+				"          Column_3 as string,",
+				"          Column_4 as string,",
+				"          Column_5 as string,",
+				"          Column_6 as string,",
+				"          Column_7 as string,",
+				"          Column_8 as string,",
+				"          Column_9 as string,",
+				"          Column_10 as string,",
+				"          Column_11 as string,",
+				"          Column_12 as string,",
+				"          Column_13 as string,",
+				"          Column_14 as string,",
+				"          Column_15 as string,",
+				"          Column_16 as string,",
+				"          Column_17 as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 filter(((greater(Column_1, '2017') && (notEquals(Column_1,'Mes') && notEquals(Column_1,'Acumulado')))  && notEquals(Column_1, 'Diferencia año anterior')) && notEquals(Column_1, 'Mensual')) ~> filter2",
+				"filter2 select(mapColumn(",
+				"          year = Column_1,",
+				"          enero = Column_2,",
+				"          febrero = Column_3,",
+				"          marzo = Column_4,",
+				"          abril = Column_5,",
+				"          mayo = Column_6,",
+				"          junio = Column_7,",
+				"          julio = Column_8,",
+				"          agosto = Column_9,",
+				"          septiembre = Column_10,",
+				"          octubre = Column_11,",
+				"          noviembre = Column_12,",
+				"          diciembre = Column_13",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 pivot(groupBy(year),",
+				"     pivotBy(year, ['2020', '2021', '2022']),",
+				"     enero = avg(toInteger(enero)),",
+				"          febrero = avg(toInteger(febrero)),",
+				"          marzo = avg(toInteger(marzo)),",
+				"          abril = avg(toInteger(abril)),",
+				"          mayo = avg(toInteger(mayo)),",
+				"          junio = avg(toInteger(junio)),",
+				"          julio = avg(toInteger(julio)),",
+				"          agosto = avg(toInteger(agosto)),",
+				"          septiembre = avg(toInteger(septiembre)),",
+				"          octubre = avg(toInteger(octubre)),",
+				"          noviembre = avg(toInteger(noviembre)),",
+				"          diciembre = avg(toInteger(diciembre)),",
+				"     columnNaming: '$N$V',",
+				"     lateral: true) ~> pivot1",
+				"pivot1 unpivot(output(",
+				"          x as integer,",
+				"          avg2020 as double",
+				"     ),",
+				"     ungroupBy(year),",
+				"     lateral: true,",
+				"     ignoreNullPivots: true) ~> unpivot1",
+				"unpivot1 sink(allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     input(",
+				"          {Año} as short,",
+				"          Mes as string,",
+				"          {Cuartos Disponibles} as string",
+				"     ),",
+				"     format: 'delimited',",
+				"     fileSystem: 'contailab',",
+				"     folderPath: 'output',",
+				"     columnDelimiter: ',',",
+				"     escapeChar: '\\\\',",
+				"     quoteChar: '\\\"',",
+				"     columnNamesAsHeader: true,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     saveOrder: 1,",
+				"     mapColumn(",
+				"          {Año} = year,",
+				"          Mes = x,",
+				"          {Cuartos Disponibles} = avg2020",
+				"     )) ~> sink1"
+			]
+		}
+	}
+}
