@@ -14,9 +14,9 @@
 			],
 			"sinks": [
 				{
-					"linkedService": {
-						"referenceName": "AzureDataLakeStorage1",
-						"type": "LinkedServiceReference"
+					"dataset": {
+						"referenceName": "Output3",
+						"type": "DatasetReference"
 					},
 					"name": "sink1",
 					"rejectedDataLinkedService": {
@@ -105,23 +105,20 @@
 				"     ignoreNullPivots: true) ~> unpivot1",
 				"unpivot1 sink(allowSchemaDrift: false,",
 				"     validateSchema: false,",
-				"     format: 'delimited',",
-				"     fileSystem: 'contailab',",
-				"     folderPath: 'output',",
-				"     columnDelimiter: ',',",
-				"     escapeChar: '\\\\',",
-				"     quoteChar: '\\\"',",
-				"     columnNamesAsHeader: true,",
+				"     input(",
+				"          Column1 as string",
+				"     ),",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     saveOrder: 1,",
 				"     mapColumn(",
-				"          {año} = year,",
-				"          mes = x,",
-				"          {cuartos disponibles} = avg2020",
-				"     )) ~> sink1"
+				"          Column1 = year,",
+				"          Column2 = x,",
+				"          Column3 = avg2020",
+				"     ),",
+				"     format: 'inline') ~> sink1"
 			]
 		}
 	}
