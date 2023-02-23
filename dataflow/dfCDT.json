@@ -14,6 +14,10 @@
 			],
 			"sinks": [
 				{
+					"dataset": {
+						"referenceName": "Output3",
+						"type": "DatasetReference"
+					},
 					"name": "sink1",
 					"rejectedDataLinkedService": {
 						"referenceName": "AzureDataLakeStorage1",
@@ -101,19 +105,18 @@
 				"     ignoreNullPivots: true) ~> unpivot1",
 				"unpivot1 sink(allowSchemaDrift: false,",
 				"     validateSchema: false,",
+				"     input(",
+				"          Column1 as string",
+				"     ),",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     keys:['year','mes','cuantos desocupados'],",
-				"     store: 'cache',",
-				"     format: 'inline',",
-				"     output: false,",
 				"     saveOrder: 1,",
 				"     mapColumn(",
-				"          year,",
-				"          mes = x,",
-				"          {cuantos desocupados} = avg2020",
+				"          Column1 = year",
 				"     ),",
-				"     preCommands: [],",
-				"     postCommands: []) ~> sink1"
+				"     format: 'inline') ~> sink1"
 			]
 		}
 	}
