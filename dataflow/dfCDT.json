@@ -116,7 +116,9 @@
 				"     skipDuplicateMapInputs: true,",
 				"     saveOrder: 1,",
 				"     mapColumn(",
-				"          Column1 = year",
+				"          {Año} = year,",
+				"          Mes = x,",
+				"          {Cuartos Disponibles} = avg2020",
 				"     ),",
 				"     format: 'inline') ~> sink1"
 			]
