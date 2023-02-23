@@ -1,5 +1,5 @@
 {
-	"name": "dataflow2",
+	"name": "dfCOT",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {

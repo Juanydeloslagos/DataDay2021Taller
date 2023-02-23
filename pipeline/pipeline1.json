@@ -52,7 +52,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "dataflow2",
+						"referenceName": "dfCOT",
 						"type": "DataFlowReference"
 					},
 					"compute": {
