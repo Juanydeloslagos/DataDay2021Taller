@@ -117,7 +117,12 @@
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     saveOrder: 1) ~> sink1"
+				"     saveOrder: 1,",
+				"     mapColumn(",
+				"          {año} = year,",
+				"          mes = x,",
+				"          {cuartos disponibles} = avg2020",
+				"     )) ~> sink1"
 			]
 		}
 	}
