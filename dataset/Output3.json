@@ -20,7 +20,15 @@
 		},
 		"schema": [
 			{
-				"name": "Column1",
+				"name": "Año",
+				"type": "String"
+			},
+			{
+				"name": "Mes",
+				"type": "String"
+			},
+			{
+				"name": "Cuartos Disponibles",
 				"type": "String"
 			}
 		]
