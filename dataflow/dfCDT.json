@@ -14,6 +14,10 @@
 			],
 			"sinks": [
 				{
+					"dataset": {
+						"referenceName": "Output3",
+						"type": "DatasetReference"
+					},
 					"name": "sink1",
 					"rejectedDataLinkedService": {
 						"referenceName": "AzureDataLakeStorage1",
@@ -101,14 +105,32 @@
 				"     ignoreNullPivots: true) ~> unpivot1",
 				"unpivot1 sink(allowSchemaDrift: false,",
 				"     validateSchema: false,",
+				"     input(",
+				"          Column1 as string,",
+				"          Column2 as string,",
+				"          Column3 as string,",
+				"          Column4 as string,",
+				"          Column5 as string,",
+				"          Column6 as string,",
+				"          Column7 as string,",
+				"          Column8 as string,",
+				"          Column9 as string,",
+				"          Column10 as string,",
+				"          Column11 as string,",
+				"          Column12 as string,",
+				"          Column13 as string,",
+				"          Column14 as string,",
+				"          Column15 as string,",
+				"          Column16 as string,",
+				"          Column17 as string",
+				"     ),",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     store: 'cache',",
-				"     format: 'inline',",
-				"     output: false,",
 				"     saveOrder: 1,",
-				"     preCommands: [],",
-				"     postCommands: []) ~> sink1"
+				"     format: 'inline') ~> sink1"
 			]
 		}
 	}
