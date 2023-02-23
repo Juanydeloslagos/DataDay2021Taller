@@ -157,9 +157,8 @@
 						"mappings": [
 							{
 								"source": {
-									"name": "Año",
 									"type": "String",
-									"physicalType": "String"
+									"ordinal": 1
 								},
 								"sink": {
 									"name": "Año",
@@ -169,9 +168,8 @@
 							},
 							{
 								"source": {
-									"name": "Mes",
 									"type": "String",
-									"physicalType": "String"
+									"ordinal": 2
 								},
 								"sink": {
 									"name": "Mes",
@@ -181,9 +179,8 @@
 							},
 							{
 								"source": {
-									"name": "Cuartos Disponibles",
 									"type": "String",
-									"physicalType": "String"
+									"ordinal": 3
 								},
 								"sink": {
 									"name": "Cuartos Disponibles",
@@ -201,7 +198,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "cvsFinal",
+						"referenceName": "csvInputFinal",
 						"type": "DatasetReference"
 					}
 				],
