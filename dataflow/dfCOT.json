@@ -6,7 +6,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "ExcelTNT",
+						"referenceName": "ExcelCOT",
 						"type": "DatasetReference"
 					},
 					"name": "source1"
@@ -53,7 +53,11 @@
 				"          Column_10 as string,",
 				"          Column_11 as string,",
 				"          Column_12 as string,",
-				"          Column_13 as string",
+				"          Column_13 as string,",
+				"          Column_14 as string,",
+				"          Column_15 as string,",
+				"          Column_16 as string,",
+				"          Column_17 as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
