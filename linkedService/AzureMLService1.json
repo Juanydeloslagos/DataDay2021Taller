@@ -1,0 +1,13 @@
+{
+	"name": "AzureMLService1",
+	"properties": {
+		"annotations": [],
+		"type": "AzureMLService",
+		"typeProperties": {
+			"subscriptionId": "55c70983-7709-465a-9f30-e0a31a02f674",
+			"resourceGroupName": "ailab",
+			"mlWorkspaceName": "datlasat",
+			"authentication": "MSI"
+		}
+	}
+}
