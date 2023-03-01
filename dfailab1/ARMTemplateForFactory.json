@@ -15,6 +15,10 @@
 			"type": "secureString",
 			"metadata": "Cadena protegida para \"connectionString\"de \"AzureSqlDatabase1\""
 		},
+		"AzureSqlDatabase2_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"AzureSqlDatabase2\""
+		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://saclaseailab.dfs.core.windows.net/"
@@ -44,7 +48,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataset": {
-								"referenceName": "Excel1",
+								"referenceName": "ExcelCOT",
 								"type": "DatasetReference",
 								"parameters": {}
 							},
@@ -61,11 +65,197 @@
 						}
 					},
 					{
-						"name": "copiarDatos",
+						"name": "dfCDT",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "getExcel",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "dfCDT",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "dfCOT",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "getExcel",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "dfCOT",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "Copy data1",
 						"type": "Copy",
 						"dependsOn": [
 							{
-								"activity": "Filter1",
+								"activity": "dfCOT",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [
+							{
+								"name": "Source",
+								"value": "contailab/output/part-00145-bddfae6c-44e6-44e8-ba0c-a16d1fe61e77-c000.csv"
+							},
+							{
+								"name": "Destination",
+								"value": "contailab/output/part-00145-bddfae6c-44e6-44e8-ba0c-a16d1fe61e77-c000.csv"
+							}
+						],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings",
+									"copyBehavior": "MergeFiles"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"type": "String",
+											"ordinal": 1
+										},
+										"sink": {
+											"name": "Año",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"type": "String",
+											"ordinal": 2
+										},
+										"sink": {
+											"name": "Mes",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"type": "String",
+											"ordinal": 3
+										},
+										"sink": {
+											"name": "Cuartos Disponibles",
+											"type": "String",
+											"physicalType": "String"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "csvInputFinal",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "cvsFinal",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy data2",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "dfCDT",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -81,24 +271,22 @@
 						"userProperties": [],
 						"typeProperties": {
 							"source": {
-								"type": "ExcelSource",
+								"type": "DelimitedTextSource",
 								"storeSettings": {
 									"type": "AzureBlobFSReadSettings",
-									"recursive": false,
+									"recursive": true,
 									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
 								}
 							},
 							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings",
-									"copyBehavior": "FlattenHierarchy"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".csv"
-								}
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"tableOption": "autoCreate",
+								"disableMetricsCollection": false
 							},
 							"enableStaging": false,
 							"translator": {
@@ -110,9 +298,9 @@
 											"ordinal": 1
 										},
 										"sink": {
-											"name": "Column1",
+											"name": "years",
 											"type": "String",
-											"physicalType": "String"
+											"physicalType": "varchar"
 										}
 									},
 									{
@@ -121,9 +309,9 @@
 											"ordinal": 2
 										},
 										"sink": {
-											"name": "Column2",
+											"name": "mes",
 											"type": "String",
-											"physicalType": "String"
+											"physicalType": "varchar"
 										}
 									},
 									{
@@ -132,141 +320,9 @@
 											"ordinal": 3
 										},
 										"sink": {
-											"name": "Column3",
+											"name": "cantidad",
 											"type": "String",
-											"physicalType": "String"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 4
-										},
-										"sink": {
-											"name": "Column4",
-											"type": "String",
-											"physicalType": "String"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 5
-										},
-										"sink": {
-											"name": "Column5",
-											"type": "String",
-											"physicalType": "String"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 6
-										},
-										"sink": {
-											"name": "Column6",
-											"type": "String",
-											"physicalType": "String"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 7
-										},
-										"sink": {
-											"name": "Column7",
-											"type": "String",
-											"physicalType": "String"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 8
-										},
-										"sink": {
-											"name": "Column8",
-											"type": "String",
-											"physicalType": "String"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 9
-										},
-										"sink": {
-											"name": "Column9",
-											"type": "String",
-											"physicalType": "String"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 10
-										},
-										"sink": {
-											"name": "Column10",
-											"type": "String",
-											"physicalType": "String"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 11
-										},
-										"sink": {
-											"name": "Column11",
-											"type": "String",
-											"physicalType": "String"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 12
-										},
-										"sink": {
-											"name": "Column12",
-											"type": "String",
-											"physicalType": "String"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 13
-										},
-										"sink": {
-											"name": "Column13",
-											"type": "String",
-											"physicalType": "String"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 14
-										},
-										"sink": {
-											"name": "Column14",
-											"type": "String",
-											"physicalType": "String"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 15
-										},
-										"sink": {
-											"name": "Column15",
-											"type": "String",
-											"physicalType": "String"
+											"physicalType": "varchar"
 										}
 									}
 								],
@@ -279,63 +335,18 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "Excel1",
+								"referenceName": "csvInputFinal",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "Output3",
+								"referenceName": "AzureSqlTable1",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						]
-					},
-					{
-						"name": "ErrorSistema",
-						"type": "Fail",
-						"dependsOn": [
-							{
-								"activity": "copiarDatos",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"message": "No se reconocieron los  valores",
-							"errorCode": "400"
-						}
-					},
-					{
-						"name": "Filter1",
-						"type": "Filter",
-						"dependsOn": [
-							{
-								"activity": "getExcel",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [
-							{
-								"name": "Mes",
-								"value": "\"Mes\""
-							}
-						],
-						"typeProperties": {
-							"items": {
-								"value": "@array(activity('getExcel').output)",
-								"type": "Expression"
-							},
-							"condition": {
-								"value": "@equals(item(), '\"2018\"')",
-								"type": "Expression"
-							}
-						}
 					}
 				],
 				"policy": {
@@ -345,12 +356,121 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/Excel1')]",
-				"[concat(variables('factoryId'), '/datasets/Output3')]"
+				"[concat(variables('factoryId'), '/datasets/ExcelCOT')]",
+				"[concat(variables('factoryId'), '/dataflows/dfCDT')]",
+				"[concat(variables('factoryId'), '/dataflows/dfCOT')]",
+				"[concat(variables('factoryId'), '/datasets/csvInputFinal')]",
+				"[concat(variables('factoryId'), '/datasets/cvsFinal')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSqlTable1')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Excel1')]",
+			"name": "[concat(parameters('factoryName'), '/AzureSqlTable1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "campo",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tbCDT"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ExcelCDT')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "CDT",
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Hoteles Monterrey y otros (Nov2022).xlsx",
+						"folderPath": "input",
+						"fileSystem": "contailab"
+					},
+					"firstRowAsHeader": false
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ExcelCOT')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -429,6 +549,73 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ExcelTNT')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "TNT",
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Hoteles Monterrey y otros (Nov2022).xlsx",
+						"folderPath": "input",
+						"fileSystem": "contailab"
+					},
+					"firstRowAsHeader": false
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Output3')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -452,71 +639,53 @@
 				},
 				"schema": [
 					{
-						"name": "Column1",
+						"name": "Año",
 						"type": "String"
 					},
 					{
-						"name": "Column2",
+						"name": "Mes",
 						"type": "String"
 					},
 					{
-						"name": "Column3",
+						"name": "Cuartos Disponibles",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/csvInputFinal')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "part-00145-bddfae6c-44e6-44e8-ba0c-a16d1fe61e77-c000.csv",
+						"folderPath": "output",
+						"fileSystem": "contailab"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
 						"type": "String"
 					},
 					{
-						"name": "Column4",
 						"type": "String"
 					},
 					{
-						"name": "Column5",
-						"type": "String"
-					},
-					{
-						"name": "Column6",
-						"type": "String"
-					},
-					{
-						"name": "Column7",
-						"type": "String"
-					},
-					{
-						"name": "Column8",
-						"type": "String"
-					},
-					{
-						"name": "Column9",
-						"type": "String"
-					},
-					{
-						"name": "Column10",
-						"type": "String"
-					},
-					{
-						"name": "Column11",
-						"type": "String"
-					},
-					{
-						"name": "Column12",
-						"type": "String"
-					},
-					{
-						"name": "Column13",
-						"type": "String"
-					},
-					{
-						"name": "Column14",
-						"type": "String"
-					},
-					{
-						"name": "Column15",
-						"type": "String"
-					},
-					{
-						"name": "Column16",
-						"type": "String"
-					},
-					{
-						"name": "Column17",
 						"type": "String"
 					}
 				]
@@ -555,6 +724,48 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/cvsFinal')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "*",
+						"folderPath": "output_final",
+						"fileSystem": "contailab"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Año",
+						"type": "String"
+					},
+					{
+						"name": "Mes",
+						"type": "String"
+					},
+					{
+						"name": "Cuartos Disponibles",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AzureDataLakeStorage1')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -585,7 +796,20 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/dataflow2')]",
+			"name": "[concat(parameters('factoryName'), '/AzureSqlDatabase2')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureSqlDatabase2_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dfCDT')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -594,7 +818,7 @@
 					"sources": [
 						{
 							"dataset": {
-								"referenceName": "Excel1",
+								"referenceName": "ExcelCDT",
 								"type": "DatasetReference"
 							},
 							"name": "source1"
@@ -602,9 +826,9 @@
 					],
 					"sinks": [
 						{
-							"dataset": {
-								"referenceName": "Output3",
-								"type": "DatasetReference"
+							"linkedService": {
+								"referenceName": "AzureDataLakeStorage1",
+								"type": "LinkedServiceReference"
 							},
 							"name": "sink1",
 							"rejectedDataLinkedService": {
@@ -615,7 +839,16 @@
 					],
 					"transformations": [
 						{
-							"name": "filter1"
+							"name": "filter2"
+						},
+						{
+							"name": "select1"
+						},
+						{
+							"name": "pivot1"
+						},
+						{
+							"name": "unpivot1"
 						}
 					],
 					"scriptLines": [
@@ -641,65 +874,217 @@
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     ignoreNoFilesFound: false) ~> source1",
-						"source1 filter(equals(Column_1, '2018')) ~> filter1",
-						"filter1 sink(allowSchemaDrift: true,",
+						"source1 filter(((greater(Column_1, '2017') && (notEquals(Column_1,'Mes') && notEquals(Column_1,'Acumulado')))  && notEquals(Column_1, 'Diferencia año anterior')) && notEquals(Column_1, 'Mensual')) ~> filter2",
+						"filter2 select(mapColumn(",
+						"          year = Column_1,",
+						"          enero = Column_2,",
+						"          febrero = Column_3,",
+						"          marzo = Column_4,",
+						"          abril = Column_5,",
+						"          mayo = Column_6,",
+						"          junio = Column_7,",
+						"          julio = Column_8,",
+						"          agosto = Column_9,",
+						"          septiembre = Column_10,",
+						"          octubre = Column_11,",
+						"          noviembre = Column_12,",
+						"          diciembre = Column_13",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"select1 pivot(groupBy(year),",
+						"     pivotBy(year, ['2020', '2021', '2022']),",
+						"     enero = avg(toInteger(enero)),",
+						"          febrero = avg(toInteger(febrero)),",
+						"          marzo = avg(toInteger(marzo)),",
+						"          abril = avg(toInteger(abril)),",
+						"          mayo = avg(toInteger(mayo)),",
+						"          junio = avg(toInteger(junio)),",
+						"          julio = avg(toInteger(julio)),",
+						"          agosto = avg(toInteger(agosto)),",
+						"          septiembre = avg(toInteger(septiembre)),",
+						"          octubre = avg(toInteger(octubre)),",
+						"          noviembre = avg(toInteger(noviembre)),",
+						"          diciembre = avg(toInteger(diciembre)),",
+						"     columnNaming: '$N$V',",
+						"     lateral: true) ~> pivot1",
+						"pivot1 unpivot(output(",
+						"          x as integer,",
+						"          avg2020 as double",
+						"     ),",
+						"     ungroupBy(year),",
+						"     lateral: true,",
+						"     ignoreNullPivots: true) ~> unpivot1",
+						"unpivot1 sink(allowSchemaDrift: false,",
 						"     validateSchema: false,",
 						"     input(",
-						"          Column1 as string,",
-						"          Column2 as string,",
-						"          Column3 as string,",
-						"          Column4 as string,",
-						"          Column5 as string,",
-						"          Column6 as string,",
-						"          Column7 as string,",
-						"          Column8 as string,",
-						"          Column9 as string,",
-						"          Column10 as string,",
-						"          Column11 as string,",
-						"          Column12 as string,",
-						"          Column13 as string,",
-						"          Column14 as string,",
-						"          Column15 as string,",
-						"          Column16 as string,",
-						"          Column17 as string",
+						"          {Año} as short,",
+						"          Mes as string,",
+						"          {Cuartos Disponibles} as string",
 						"     ),",
+						"     format: 'delimited',",
+						"     fileSystem: 'contailab',",
+						"     folderPath: 'output',",
+						"     columnDelimiter: ',',",
+						"     escapeChar: '\\\\',",
+						"     quoteChar: '\\\"',",
+						"     columnNamesAsHeader: true,",
 						"     umask: 0022,",
 						"     preCommands: [],",
 						"     postCommands: [],",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> sink1"
+						"     saveOrder: 1,",
+						"     mapColumn(",
+						"          {Año} = year,",
+						"          Mes = x,",
+						"          {Cuartos Disponibles} = avg2020",
+						"     )) ~> sink1"
 					]
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/Excel1')]",
-				"[concat(variables('factoryId'), '/datasets/Output3')]",
+				"[concat(variables('factoryId'), '/datasets/ExcelCDT')]",
 				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/powerquery1')]",
+			"name": "[concat(parameters('factoryName'), '/dfCOT')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"type": "WranglingDataFlow",
+				"type": "MappingDataFlow",
 				"typeProperties": {
 					"sources": [
 						{
-							"name": "Excel1",
-							"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> Excel1",
 							"dataset": {
-								"referenceName": "Excel1",
+								"referenceName": "ExcelCOT",
 								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "AzureDataLakeStorage1",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sink1",
+							"rejectedDataLinkedService": {
+								"referenceName": "AzureDataLakeStorage1",
+								"type": "LinkedServiceReference"
 							}
 						}
 					],
-					"script": "section Section1;\r\nshared Excel1 = let AdfDoc = AzureStorage.DataLakeContents(\"https://saclaseailab.dfs.core.windows.net/contailab/input/Hoteles Monterrey y otros (Nov2022).xlsx\"), Excel = Excel.Workbook(AdfDoc),ExcelSheet = Excel{[Item=\"COT\",Kind=\"Sheet\"]}[Data] in ExcelSheet;\r\nshared UserQuery = let Source = #\"Excel1\",\n  #\"Filas superiores quitadas\" = Table.Skip(Source, 6),\n  #\"Filas superiores quitadas 1\" = Table.Skip(#\"Filas superiores quitadas\", 1),\n  #\"Columnas con nombre cambiado\" = Table.RenameColumns(#\"Filas superiores quitadas 1\", {{\"Column1\", \"Mes\"}, {\"Column2\", \"Enero\"}, {\"Column3\", \"Febrero\"}, {\"Column4\", \"Marzo\"}, {\"Column5\", \"Abril\"}, {\"Column6\", \"Mayo\"}, {\"Column7\", \"Junio\"},{\"Column8\", \"Julio\"},{\"Column9\", \"Agosto\"},{\"Column10\", \"Septiembre\"},{\"Column11\", \"Octubre\"},{\"Column12\", \"Noviembre\"},{\"Column13\", \"Diciembre\"}}) in #\"Columnas con nombre cambiado\";\r\n",
-					"documentLocale": "en-us"
+					"transformations": [
+						{
+							"name": "filter2"
+						},
+						{
+							"name": "select1"
+						},
+						{
+							"name": "pivot1"
+						},
+						{
+							"name": "unpivot1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          Column_1 as string,",
+						"          Column_2 as string,",
+						"          Column_3 as string,",
+						"          Column_4 as string,",
+						"          Column_5 as string,",
+						"          Column_6 as string,",
+						"          Column_7 as string,",
+						"          Column_8 as string,",
+						"          Column_9 as string,",
+						"          Column_10 as string,",
+						"          Column_11 as string,",
+						"          Column_12 as string,",
+						"          Column_13 as string,",
+						"          Column_14 as string,",
+						"          Column_15 as string,",
+						"          Column_16 as string,",
+						"          Column_17 as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> source1",
+						"source1 filter(((greater(Column_1, '2017') && (notEquals(Column_1,'Mes') && notEquals(Column_1,'Acumulado')))  && notEquals(Column_1, 'Diferencia año anterior')) && notEquals(Column_1, 'Mensual')) ~> filter2",
+						"filter2 select(mapColumn(",
+						"          year = Column_1,",
+						"          enero = Column_2,",
+						"          febrero = Column_3,",
+						"          marzo = Column_4,",
+						"          abril = Column_5,",
+						"          mayo = Column_6,",
+						"          junio = Column_7,",
+						"          julio = Column_8,",
+						"          agosto = Column_9,",
+						"          septiembre = Column_10,",
+						"          octubre = Column_11,",
+						"          noviembre = Column_12,",
+						"          diciembre = Column_13",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"select1 pivot(groupBy(year),",
+						"     pivotBy(year, ['2020', '2021', '2022']),",
+						"     enero = avg(toInteger(enero)),",
+						"          febrero = avg(toInteger(febrero)),",
+						"          marzo = avg(toInteger(marzo)),",
+						"          abril = avg(toInteger(abril)),",
+						"          mayo = avg(toInteger(mayo)),",
+						"          junio = avg(toInteger(junio)),",
+						"          julio = avg(toInteger(julio)),",
+						"          agosto = avg(toInteger(agosto)),",
+						"          septiembre = avg(toInteger(septiembre)),",
+						"          octubre = avg(toInteger(octubre)),",
+						"          noviembre = avg(toInteger(noviembre)),",
+						"          diciembre = avg(toInteger(diciembre)),",
+						"     columnNaming: '$N$V',",
+						"     lateral: true) ~> pivot1",
+						"pivot1 unpivot(output(",
+						"          x as integer,",
+						"          avg2020 as double",
+						"     ),",
+						"     ungroupBy(year),",
+						"     lateral: true,",
+						"     ignoreNullPivots: true) ~> unpivot1",
+						"unpivot1 sink(allowSchemaDrift: false,",
+						"     validateSchema: false,",
+						"     input(",
+						"          {Año} as short,",
+						"          Mes as string,",
+						"          {Cuartos Disponibles} as string",
+						"     ),",
+						"     format: 'delimited',",
+						"     fileSystem: 'contailab',",
+						"     folderPath: 'output',",
+						"     columnDelimiter: ',',",
+						"     escapeChar: '\\\\',",
+						"     quoteChar: '\\\"',",
+						"     columnNamesAsHeader: true,",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     saveOrder: 1,",
+						"     mapColumn(",
+						"          {Año} = year,",
+						"          Mes = x,",
+						"          {Cuartos Disponibles} = avg2020",
+						"     )) ~> sink1"
+					]
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/Excel1')]"
+				"[concat(variables('factoryId'), '/datasets/ExcelCOT')]",
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
 			]
 		}
 	]
