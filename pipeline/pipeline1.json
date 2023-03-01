@@ -274,8 +274,8 @@
 								},
 								"sink": {
 									"name": "cantidad",
-									"type": "Double",
-									"physicalType": "float"
+									"type": "String",
+									"physicalType": "varchar"
 								}
 							}
 						],
