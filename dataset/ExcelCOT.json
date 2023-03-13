@@ -8,6 +8,7 @@
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
+			"sheetName": "COT",
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": "Hoteles Monterrey y otros (Nov2022).xlsx",
