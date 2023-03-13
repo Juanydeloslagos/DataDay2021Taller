@@ -5,8 +5,8 @@
 		"annotations": [],
 		"type": "AzureBlobFS",
 		"typeProperties": {
-			"url": "https://saclaseailab.dfs.core.windows.net/",
-			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQEJERUZDOTgzLUNEQUYtNEIzNS04MDI5LTY2ODRBRDI2MDEwRl85MzI4YjQyNy03NTJjLTRkMzItYmJiNS1lMzQ5MTM0MWE0NzAiDQp9"
+			"url": "https://pocclase1946189592.dfs.core.windows.net/",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQDg3NTVEMzcxLTJEQ0EtNDcwNC05ODVCLUJEREEyREIwQUZCRl9hNDE5N2Y1NC1mNGJlLTRhZDUtOGU1Zi03ZmQ5NTk5ZWY4ZmMiDQp9"
 		}
 	}
 }
