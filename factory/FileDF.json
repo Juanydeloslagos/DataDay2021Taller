@@ -1,0 +1,9 @@
+{
+	"name": "FileDF",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "943afe3d-c843-4641-b778-af5c7241dde9",
+		"tenantId": "32ad7dac-2cb9-4f3c-8805-d703cdf1c46a"
+	}
+}
