@@ -12,7 +12,7 @@
 				"type": "AzureBlobFSLocation",
 				"fileName": "*",
 				"folderPath": "output_final",
-				"fileSystem": "contailab"
+				"fileSystem": "pruebasturismo"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
