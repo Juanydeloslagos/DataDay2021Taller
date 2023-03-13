@@ -111,7 +111,7 @@
 				"          {Cuartos Disponibles} as string",
 				"     ),",
 				"     format: 'delimited',",
-				"     fileSystem: 'contailab',",
+				"     fileSystem: 'pruebasturismo',",
 				"     folderPath: 'output',",
 				"     columnDelimiter: ',',",
 				"     escapeChar: '\\\\',",
