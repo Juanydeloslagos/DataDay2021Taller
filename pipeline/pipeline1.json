@@ -247,33 +247,12 @@
 						"mappings": [
 							{
 								"source": {
+									"name": "Año",
 									"type": "String",
-									"ordinal": 1
+									"physicalType": "String"
 								},
 								"sink": {
-									"name": "years",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"type": "String",
-									"ordinal": 2
-								},
-								"sink": {
-									"name": "mes",
-									"type": "String",
-									"physicalType": "varchar"
-								}
-							},
-							{
-								"source": {
-									"type": "String",
-									"ordinal": 3
-								},
-								"sink": {
-									"name": "cantidad",
+									"name": "campo",
 									"type": "String",
 									"physicalType": "varchar"
 								}
@@ -288,7 +267,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "csvInputFinal",
+						"referenceName": "DelimitedText1",
 						"type": "DatasetReference"
 					}
 				],
