@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "*",
+				"fileName": "part-00145-f99d93aa-2ca6-4d65-8ae9-335663cc9fa5-c000.csv",
 				"folderPath": "output",
 				"fileSystem": "pruebasturismo"
 			},
