@@ -9,7 +9,10 @@
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobFSLocation"
+				"type": "AzureBlobFSLocation",
+				"fileName": "final",
+				"folderPath": "output_final",
+				"fileSystem": "pruebasturismo"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
